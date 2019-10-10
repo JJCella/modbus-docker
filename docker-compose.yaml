@@ -1,0 +1,11 @@
+version: "2"
+services:
+  server:
+    build: ./modbus-server
+    restart: unless-stopped
+  client:
+    build: ./modbus-client
+    depends_on:
+      - server
+    restart: unless-stopped
+
