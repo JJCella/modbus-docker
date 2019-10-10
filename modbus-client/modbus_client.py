@@ -1,3 +1,8 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+# Modbus/TCP client
+
 from pyModbusTCP.client import ModbusClient
 import socket
 import time
@@ -8,6 +13,8 @@ logging.basicConfig(level=logging.DEBUG, format='%(asctime)s %(message)s')
 modbus_servers = []
 
 logging.info('Starting scanning')
+
+#scan hosts
 
 for i in range(1,101):
     try:
@@ -23,6 +30,8 @@ for ms in modbus_servers:
 
 logging.info('{} host(s) found ! Starting reading loop'.format(len(modbus_servers)))
 
+#read registers for each host
+
 while True:
     for ms in modbus_servers:
         c = ms['connection']
@@ -32,4 +41,4 @@ while True:
         else:
            logging.info('Trying to connect to : {}'.format(ms['ip']))
            c.open()
-    time.sleep(10)
+    time.sleep(2)
