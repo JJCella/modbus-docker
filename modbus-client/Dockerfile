@@ -4,6 +4,6 @@ RUN mkdir /modbus
 
 COPY modbus_client.py /modbus/modbus_client.py
 
-RUN pip install pyModbusTCP
+RUN pip install pyModbusTCP docker
 
-CMD python /modbus/modbus_client.py
+CMD ["python", "-u", "/modbus/modbus_client.py"]

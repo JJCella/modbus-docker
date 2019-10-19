@@ -8,25 +8,20 @@ import socket
 import time
 from datetime import datetime
 import logging
+import docker
 
 logging.basicConfig(level=logging.DEBUG, format='%(asctime)s %(message)s')
 modbus_servers = []
+
+client = docker.from_env()
 
 logging.info('Starting scanning')
 
 #scan hosts
 
-for i in range(1,101):
-    try:
-        host = 'modbus_server_{}'.format(i)
-        ip = socket.gethostbyname(host)
-    except:
-        pass
-    else:
-        modbus_servers.append({'host' : host, 'ip': ip, 'connection': None})
-
-for ms in modbus_servers:
-    ms['connection'] = ModbusClient(host=ip, port=5020)
+for container in client.containers.list(all=False, filters={"ancestor":"modbus-docker_server"}):
+        ip = socket.gethostbyname(container.name)
+        modbus_servers.append({'host' : container.name, 'ip': ip, 'connection': ModbusClient(host=ip, port=5020)})
 
 logging.info('{} host(s) found ! Starting reading loop'.format(len(modbus_servers)))
 
